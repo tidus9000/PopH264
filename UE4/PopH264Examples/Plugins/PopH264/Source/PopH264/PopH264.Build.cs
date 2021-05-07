@@ -27,6 +27,8 @@ public class PopH264 : ModuleRules
 			{
 				"Core",
                 "popH264_ue4",
+                "Json",
+                "JsonUtilities",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
