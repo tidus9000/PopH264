@@ -38,7 +38,6 @@ UUEPopH264::Decoder::Decoder(FDecoderParams _DecoderParams, bool _ThreadedDecodi
 {
 	int32_t Version = popH264DLL.PopH264_GetVersion();
 	int32_t Version2 = PopH264_GetVersion();
-	UE_LOG(LogTemp, Warning, TEXT("PopH264 version %i"), Version);
 	UE_LOG(LogTemp, Warning, TEXT("PopH264 version %i"), Version2);
 	this->ThreadedDecoding = _ThreadedDecoding;
 
@@ -52,7 +51,7 @@ UUEPopH264::Decoder::Decoder(FDecoderParams _DecoderParams, bool _ThreadedDecodi
 	OutJson = "{ \"Decoder\":\"\",\"VerboseDebug\" : false,\"AllowBuffering\" : false,\"DoubleDecodeKeyframe\" : false,\"DrainOnKeyframe\" : false,\"LowPowerMode\" : false,\"DropBadFrames\" : false,\"DecodeSei\" : false }";
 	//Instance = PopH264_CreateDecoder(TCHAR_TO_ANSI(*OutJson), (char*)ErrorBuffer.GetData(), ErrorBuffer.Num());
 	Instance = popH264DLL.PopH264_CreateDecoder(TCHAR_TO_ANSI(*OutJson), (char*)ErrorBuffer.GetData(), ErrorBuffer.Num());
-	UE_LOG(LogTemp, Warning, TEXT("Instance create"));
+	UE_LOG(LogTemp, Warning, TEXT("Instance created"));
 }
 
 bool UUEPopH264::Decoder::PushFrameData(TArray<uint8> H264Data, int FrameNumber)

@@ -145,7 +145,7 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class POPH264_API UUEPopH264 : public UActorComponent
 {
 	GENERATED_BODY()
-
+public:
 	class Decoder
 	{
 	protected:
