@@ -26,7 +26,7 @@ void ARawDecoder::PushData(TArray<uint8> Data, long TimeStamp)
 		Decoder = new UUEPopH264::Decoder(DecoderParams, ThreadedDecoding);
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("pushing x %i"), Data.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("pushing x %i"), Data.Num());
 	Decoder->PushFrameData(Data, (int)TimeStamp);
 }
 
