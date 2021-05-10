@@ -36,7 +36,6 @@ void UUEPopH264::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 
 UUEPopH264::Decoder::Decoder(FDecoderParams _DecoderParams, bool _ThreadedDecoding)
 {
-	int32_t Version = popH264DLL.PopH264_GetVersion();
 	int32_t Version2 = PopH264_GetVersion();
 	UE_LOG(LogTemp, Warning, TEXT("PopH264 version %i"), Version2);
 	this->ThreadedDecoding = _ThreadedDecoding;
@@ -48,9 +47,7 @@ UUEPopH264::Decoder::Decoder(FDecoderParams _DecoderParams, bool _ThreadedDecodi
 	//TSharedRef<FJsonObject> OutJson = MakeShared<FJsonObject>();
 	FString OutJson;
 	FJsonObjectConverter::UStructToJsonObjectString(_DecoderParams, OutJson, 0, 0);
-	OutJson = "{ \"Decoder\":\"\",\"VerboseDebug\" : false,\"AllowBuffering\" : false,\"DoubleDecodeKeyframe\" : false,\"DrainOnKeyframe\" : false,\"LowPowerMode\" : false,\"DropBadFrames\" : false,\"DecodeSei\" : false }";
-	//Instance = PopH264_CreateDecoder(TCHAR_TO_ANSI(*OutJson), (char*)ErrorBuffer.GetData(), ErrorBuffer.Num());
-	Instance = popH264DLL.PopH264_CreateDecoder(TCHAR_TO_ANSI(*OutJson), (char*)ErrorBuffer.GetData(), ErrorBuffer.Num());
+	Instance = PopH264_CreateDecoder(TCHAR_TO_ANSI(*OutJson), (char*)ErrorBuffer.GetData(), ErrorBuffer.Num());
 	UE_LOG(LogTemp, Warning, TEXT("Instance created"));
 }
 
@@ -93,12 +90,10 @@ int UUEPopH264::Decoder::GetNextFrame(TArray<UTexture2D*> Planes, TArray<PixelFo
 FFrameMeta UUEPopH264::Decoder::GetNextFrameAndMeta(TArray<UTexture2D*> Planes, TArray<PixelFormat> PixelFormats)
 {
 	FFrameMeta Meta;
-	char* JsonbufferAsChar = new char();// = TCHAR_TO_ANSI(*BytesToString(GetJsonBuffer().GetData(), GetJsonBuffer().Num()));
-	int32_t JsonBufferSize = sizeof(JsonbufferAsChar);
-	int32_t* MetaValues = new int32_t();
+	char JsonbufferAsChar[1000];// = TCHAR_TO_ANSI(*BytesToString(GetJsonBuffer().GetData(), GetJsonBuffer().Num()));
 
 	//popH264DLL.PopH264_GetMeta(Instance, MetaValues, 4);
-	//popH264DLL.PopH264_PeekFrame(Instance, JsonbufferAsChar, 444);
+	popH264DLL.PopH264_PeekFrame(Instance, JsonbufferAsChar, 1000);
 	//PopH264_PeekFrame(Instance, JsonbufferAsChar, 445);
 	//popH264DLL.PopH264_EnumDecoders(JsonbufferAsChar, 1000);
 
@@ -112,6 +107,7 @@ FFrameMeta UUEPopH264::Decoder::GetNextFrameAndMeta(TArray<UTexture2D*> Planes, 
 
 	if (FJsonSerializer::Deserialize(Jsonread, JsonObject))
 	{
+		Meta.Planes.Empty();
 		TArray <TSharedPtr<FJsonValue>> PlanesJs = JsonObject->GetArrayField("Planes");
 		for (int i = 0; i < PlanesJs.Num(); i++)
 		{
@@ -122,7 +118,7 @@ FFrameMeta UUEPopH264::Decoder::GetNextFrameAndMeta(TArray<UTexture2D*> Planes, 
 			Plane.Format = PlaneObj->GetStringField("Format");
 			Plane.Height = PlaneObj->GetIntegerField("Height");
 			Plane.Width = PlaneObj->GetIntegerField("Width");
-			Plane.PixelFormat = (PixelFormat)PlaneObj->GetIntegerField("PixelFormat");
+			//Plane.PixelFormat = (PixelFormat)PlaneObj->GetIntegerField("PixelFormat");
 			//FJsonObjectConverter::JsonObjectToUStruct(PlaneObj.ToSharedRef(), &Plane, 0, 0);
 			Meta.Planes.Add(Plane);
 		}

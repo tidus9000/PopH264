@@ -58,13 +58,13 @@ void ARawDecoder::Tick(float DeltaTime)
 	if (Decoder == nullptr)
 		return;
 
-	/*int NewFrame = Decoder->GetNextFrame(FramePlanes, FramePlaneFormats);
+	int NewFrame = Decoder->GetNextFrame(FramePlanes, FramePlaneFormats);
 	if (NewFrame != 0) {
 		UE_LOG(LogTemp, Warning, TEXT("Decoded Frame %i"), NewFrame);
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("Either frame is zero or frame was not decoded"));
-	}*/
+	}
 }
 
 void ARawDecoder::FetchRawH264HTTP(FString URL)
