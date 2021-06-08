@@ -28,6 +28,7 @@ protected:
 	TArray<PixelFormat> FramePlaneFormats;
 	FDecoderParams DecoderParams;
 	void OnRawH264HTTPReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool wasSuccessful);
+	int count = 0;
 
 public:	
 	// Called every frame

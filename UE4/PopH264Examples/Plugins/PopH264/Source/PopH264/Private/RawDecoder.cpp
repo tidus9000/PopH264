@@ -58,12 +58,15 @@ void ARawDecoder::Tick(float DeltaTime)
 	if (Decoder == nullptr)
 		return;
 
+	//UE_LOG(LogTemp, Warning, TEXT("Getting next frame..."));
 	int NewFrame = Decoder->GetNextFrame(FramePlanes, FramePlaneFormats);
-	if (NewFrame != 0) {
+	if (NewFrame != INT_MAX) {
 		UE_LOG(LogTemp, Warning, TEXT("Decoded Frame %i"), NewFrame);
+		count++;
+		UE_LOG(LogTemp, Warning, TEXT("Count: %i"), count);
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("Either frame is zero or frame was not decoded"));
+		//UE_LOG(LogTemp, Error, TEXT("frame was not decoded"));
 	}
 }
 

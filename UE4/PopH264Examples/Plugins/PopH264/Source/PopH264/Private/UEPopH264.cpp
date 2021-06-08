@@ -73,7 +73,7 @@ bool UUEPopH264::Decoder::PushFrameData(FFrameInput Frame)
 			Length = Frame.Bytes.Num();
 		}
 		int Result = popH264DLL.PopH264_PushData(Instance, Frame.Bytes.GetData(), Length, Frame.FrameNumber);
-		//UE_LOG(LogTemp, Warning, TEXT("Result: %i"), Result);
+		UE_LOG(LogTemp, Warning, TEXT("Result: %i"), Result);
 	}
 
 	//not doing threaded decoding yet
@@ -132,11 +132,13 @@ FFrameMeta UUEPopH264::Decoder::GetNextFrameAndMeta(TArray<UTexture2D*> Planes, 
 	if (PlaneCount <= 0)
 	{
 		PixelFormats.Empty();
+		//UE_LOG(LogTemp, Warning, TEXT("No Planes"));
 		return FFrameMeta();
 	}
 
 	if (Meta.FrameNumber < 0)
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("Frame number less than zero"));
 		return FFrameMeta();
 	}
 
@@ -177,6 +179,7 @@ FFrameMeta UUEPopH264::Decoder::GetNextFrameAndMeta(TArray<UTexture2D*> Planes, 
 	auto Plane2Data = (PlaneCaches.Num() >= 3 && PlaneCaches[2].GetData() != nullptr) ? PlaneCaches[2] : UnusedBuffer;
 
 	auto PopResult = popH264DLL.PopH264_PopFrame(Instance, Plane0Data.GetData(), Plane0Data.Num(), Plane1Data.GetData(), Plane1Data.Num(), Plane2Data.GetData(), Plane2Data.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Pop Result: %i"), PopResult);
 	if (PopResult < 0)
 	{
 		return FFrameMeta();

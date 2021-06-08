@@ -57,6 +57,7 @@ USTRUCT()
 struct FFrameMeta
 {
 	GENERATED_BODY()
+		FFrameMeta() : FrameNumber(INT32_MAX) {}
 public:
 	UPROPERTY()
 		TArray<FPlaneMeta>	Planes;
